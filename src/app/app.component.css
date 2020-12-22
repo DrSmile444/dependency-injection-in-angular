@@ -1,0 +1,9 @@
+.user-label {
+  font-weight: bold;
+  width: 100px;
+  display: inline-block;
+}
+
+.user-list-item {
+  margin-bottom: 20px;
+}

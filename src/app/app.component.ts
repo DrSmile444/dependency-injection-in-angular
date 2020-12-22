@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import {User} from './models';
-import {MOCK_USERS} from './mocks';
+
+import { User, UserAddress } from './models';
+import { MOCK_USERS } from './mocks';
 
 
 @Component({
@@ -17,7 +18,20 @@ export class AppComponent {
     this.getUsers();
   }
 
+  transformAddress(userAddress: UserAddress): string {
+    return `${userAddress.city}, ${userAddress.street}, ${userAddress.suite}`;
+  }
+
+  transformWebsite(website: string): string {
+    return `https://${website}`;
+  }
+
   private getUsers(): void {
-    this.users = MOCK_USERS;
+    this.areUsersLoading = true;
+
+    setTimeout(() => {
+      this.areUsersLoading = false;
+      this.users = MOCK_USERS;
+    }, 1000);
   }
 }
