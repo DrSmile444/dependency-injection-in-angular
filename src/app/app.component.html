@@ -1,4 +1,6 @@
-<ul>
+<div *ngIf="areUsersLoading">Loading...</div>
+
+<ul *ngIf="!areUsersLoading">
   <li *ngFor="let user of users" class="user-list-item">
     <div>
       <label class="user-label" for="user_name">Username:</label>
@@ -13,8 +15,9 @@
     <div>
       <label class="user-label" for="user_website">Website:</label>
       <a id="user_website"
-         [href]="transformWebsite(user.website)"
-         target="_blank">{{ user.website }}</a>
+         [appChangeText]="'Go to the website'"
+         [href]="user.website | transformWebsite"
+         target="_blank">{{ user.website | transformWebsite }}</a>
     </div>
 
     <div>
@@ -24,7 +27,7 @@
 
     <div>
       <label class="user-label" for="user_address">Address:</label>
-      <span id="user_address">{{ transformAddress(user.address) }}</span>
+      <span id="user_address">{{ user.address | transformAddress }}</span>
     </div>
   </li>
 </ul>

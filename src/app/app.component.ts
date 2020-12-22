@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { finalize } from 'rxjs/operators';
 
-import { User, UserAddress } from './models';
-import { MOCK_USERS } from './mocks';
+import { User } from './models';
+import { UserService } from './services';
+import {TransformAddressPipe} from './pipes';
 
 
 @Component({
@@ -14,24 +16,22 @@ export class AppComponent {
 
   areUsersLoading: boolean = false;
 
-  constructor() {
+  constructor(
+    private userService: UserService,
+    private transformAddressPipe: TransformAddressPipe,
+  ) {
     this.getUsers();
-  }
-
-  transformAddress(userAddress: UserAddress): string {
-    return `${userAddress.city}, ${userAddress.street}, ${userAddress.suite}`;
-  }
-
-  transformWebsite(website: string): string {
-    return `https://${website}`;
   }
 
   private getUsers(): void {
     this.areUsersLoading = true;
 
-    setTimeout(() => {
-      this.areUsersLoading = false;
-      this.users = MOCK_USERS;
-    }, 1000);
+    this.userService.getUsers()
+      .pipe(finalize(() => this.areUsersLoading = false))
+      .subscribe((users) => {
+        this.users = users;
+        const firstUserAddress = this.transformAddressPipe.transform(this.users[0].address);
+        console.log(firstUserAddress);
+      });
   }
 }
